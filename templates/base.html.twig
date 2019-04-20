@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Test FB Application{% endblock %}</title>
+    {% block stylesheets %}
+        <script defer type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    {% endblock %}
+</head>
+<body>
+<div id="sidebar">
+    {% block sidebar %}
+        <ul>
+            <li><a href="/">Home</a></li>
+        </ul>
+    {% endblock %}
+</div>
+
+<div id="content">
+    {% block body %}{% endblock %}
+</div>
+</body>
+
+</html>

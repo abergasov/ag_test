@@ -1,3 +1,9 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+index:
+  path: /
+  controller: App\Controller\FacebookController::index
+  methods: GET
+
+app_facebookAdsManager_getAccInfo:
+  path: /api/facebook/ads/manager
+  controller: App\Controller\FacebookAdsManagerController::getAccInfo
+  methods: GET

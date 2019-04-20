@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <script defer type="text/javascript" src="{{ asset('js/bundle.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <div id="fb_app">
+        <p>{{ number }}</p>
+        <p>${message}</p>
+    </div>
+{% endblock %}
