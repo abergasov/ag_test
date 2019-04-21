@@ -56,7 +56,7 @@ class FacebookAdsManagerController {
      * Get acc info, add campain, adSets
      * @return array
      */
-    public function getAccInfo () : array {
+    private function getAccInfo () : array {
         $result = ['ok' => true];
         $api = Api::instance();
         $res = $api->call('/me', 'GET', [
@@ -76,7 +76,7 @@ class FacebookAdsManagerController {
     /**
      * @return array
      */
-    public function setAdSetLimit () : array {
+    private function setAdSetLimit () : array {
         $data = $this->getJSONFromRequest(['amount', 'ad_set_id', 'act_id']);
         $adset = new AdSet($data['ad_set_id'], $data['act_id']);
         $adset->setData(array(
@@ -87,7 +87,7 @@ class FacebookAdsManagerController {
         return ['ok' => true];
     }
 
-    public function setSpendCup () : array {
+    private function setSpendCup () : array {
         $data = $this->getJSONFromRequest(['amount', 'act_id']);
 
         $account = new AdAccount($data['act_id']);
