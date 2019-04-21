@@ -1,4 +1,13 @@
 {
+    "facebook/graph-sdk": {
+        "version": "5.7.0"
+    },
+    "facebook/php-ads-sdk": {
+        "version": "3.2.13"
+    },
+    "facebook/php-business-sdk": {
+        "version": "3.2.13"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -111,6 +120,12 @@
             "config/packages/test/routing.yaml",
             "config/routes.yaml"
         ]
+    },
+    "symfony/security-core": {
+        "version": "v4.2.7"
+    },
+    "symfony/security-csrf": {
+        "version": "v4.2.7"
     },
     "symfony/twig-bridge": {
         "version": "v4.2.7"

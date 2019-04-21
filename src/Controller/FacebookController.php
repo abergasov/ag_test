@@ -8,6 +8,6 @@ class FacebookController extends AbstractController {
 
     public function index () {
 
-        return $this->render('index.html.twig', ['number' => 666]);
+        return $this->render('index.html.twig');
     }
 }

@@ -4,6 +4,6 @@ index:
   methods: GET
 
 app_facebookAdsManager_getAccInfo:
-  path: /api/facebook/ads/manager
-  controller: App\Controller\FacebookAdsManagerController::getAccInfo
-  methods: GET
+  path: /api/facebook/ads/manager/{action}
+  controller: App\Controller\FacebookAdsManagerController::index
+  methods: GET|POST

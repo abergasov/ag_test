@@ -6,7 +6,37 @@
 
 {% block body %}
     <div id="fb_app">
-        <p>{{ number }}</p>
-        <p>${message}</p>
+        <p v-if="pending_request">Data loading</p>
+        <h1 v-if="errorMsg" style="color: red">${errorMsg}</h1>
+        <h1 v-if="confirmMsg" style="color: green">${confirmMsg}</h1>
+        <div v-if="adAccData.name">
+            <h3>Ad Account name: ${adAccData.name}</h3>
+            <h4>Created: ${adAccData.created_time}</h4>
+            <h4>Currency: ${adAccData.currency}</h4>
+            <h4>Amount spent: ${adAccData.amount_spent}</h4>
+            <h4>Balance: ${adAccData.balance}</h4>
+
+            <div>
+                <div>Spend cap: <input type="number" v-model="adAccData.spend_cap">
+                    <button v-on:click="changeSpendCup()">change</button>
+                </div>
+            </div>
+            <div v-if="adAccData.adsets.length > 0">
+                <h3>Ads Sets:</h3>
+                <div v-for="(item) in adAccData.adsets" :key="item.id">Name: ${item.name}, status: ${item.status}
+                    <div>created: ${item.created_time}</div>
+                    <div>Daily budget: <input type="number" v-model="item.daily_budget">
+                        <button v-on:click="changeAdsetAmount(item.id)">change</button>
+                    </div>
+                    <div v-if="notEmptyObject(item.targeting)">
+                        Age max: ${item.targeting.age_max} <br/>
+                        Age min: ${item.targeting.age_min} <br/>
+                    </div>
+                    <hr>
+                </div>
+
+            </div>
+        </div>
+        <p></p>
     </div>
 {% endblock %}

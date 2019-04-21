@@ -4,6 +4,8 @@
 /.env.local.php
 /.env.*.local
 /public/bundles/
+/public/trace/logs/*
+!/public/trace/logs/.gitkeep
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
