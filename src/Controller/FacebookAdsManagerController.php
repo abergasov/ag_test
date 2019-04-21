@@ -22,7 +22,7 @@ class FacebookAdsManagerController {
         Api::init(
             $this->loadFromEnv('fb_id'),
             $this->loadFromEnv('fb_key'),
-            '1' . $this->loadFromEnv('el_marker')
+            $this->loadFromEnv('el_marker')
         );
     }
 
