@@ -54,16 +54,18 @@ trait LoggerTrait {
         $logData[] = '$_COOKIE = ' . var_export(filter_input_array(INPUT_COOKIE, FILTER_SANITIZE_STRING),true);
 
 
-        $logData[] = 'access_log = ' . var_export($this->parseLogFile('access_log'), true);
-        $logData[] = 'error_log = ' . var_export($this->parseLogFile('error_log'), true);
-
-
+        $logData[] = 'access_log = ' . var_export($this->parseLogFile('tg_access_log'), true);
+        $logData[] = 'error_log = ' . var_export($this->parseLogFile('tg_error_log'), true);
 
         file_put_contents($filePath, "\xEF\xBB\xBF" . implode("\n\n", $logData));
         return $domain . $publicPath;
     }
 
     private function  parseLogFile ($logFile) {
+        $logFile = $this->loadFromEnv($logFile);
+        if ($logFile === false) {
+            return [];
+        }
         $logFile = $this->projectDir . '/' . $logFile;
         if (!file_exists($logFile)) {
             return [];
