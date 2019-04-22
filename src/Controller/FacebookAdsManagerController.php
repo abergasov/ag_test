@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\AppBundle\Security\TokenAuthenticator;
 use App\Controller\Traits\LoggerTrait;
 use FacebookAds\Api;
 use FacebookAds\Object\AdAccount;
@@ -27,6 +28,13 @@ class FacebookAdsManagerController {
     }
 
     public function index (Request $request, $action) {
+        if (TokenAuthenticator::manageToken($request) === false) {
+            $response = new Response(json_encode([
+                'ok' => false, 'message' => 'Invalid access token'
+            ]), 401);
+            $response->headers->set('Content-Type', 'application/json');
+            return $response;
+        }
         try {
             switch ($action) {
                 case 'info':

@@ -6,6 +6,7 @@
 
 {% block body %}
     <div id="fb_app">
+        <input type="hidden" id="token" value="{{ token }}">
         <p v-if="pending_request">Data loading</p>
         <h1 v-if="errorMsg" style="color: red">${errorMsg}</h1>
         <h1 v-if="confirmMsg" style="color: green">${confirmMsg}</h1>

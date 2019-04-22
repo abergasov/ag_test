@@ -2,11 +2,13 @@
 
 namespace App\Tests\Controller;
 
+use App\AppBundle\Security\TokenAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class FacebookAdsManagerControllerTest extends WebTestCase {
 
     public function testIndex () {
+        $requestHeaders = ['HTTP_X-AUTH-DATA' => TokenAuthenticator::manageToken()];
 
         $types = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'];
         $allowedActions = ['info', 'adset_limit', 'acc_spend_cup'];
@@ -21,6 +23,13 @@ class FacebookAdsManagerControllerTest extends WebTestCase {
             foreach ($allowedActions as $allowedAction) {
                 $client->request($rType, $path . $allowedAction);
                 if ($rType === 'GET' || $rType === 'POST') {
+
+                    //unatorized request
+                    $response = $client->getResponse();
+                    $this->assertEquals(401, $response->getStatusCode());
+
+                    //autoreized request
+                    $client->request($rType, $path . $allowedAction, [], [], $requestHeaders);
                     $response = $client->getResponse();
                     $this->assertEquals(200, $response->getStatusCode());
                     $this->assertEquals('application/json', $response->headers->get('Content-Type'));
@@ -29,6 +38,9 @@ class FacebookAdsManagerControllerTest extends WebTestCase {
                 }
             }
             $client->request('GET', $path . $this->generateString());
+            $this->assertEquals(401, $client->getResponse()->getStatusCode());
+
+            $client->request('GET', $path . $this->generateString(), [], [], $requestHeaders);
             $this->assertEquals(200, $client->getResponse()->getStatusCode());
         }
     }

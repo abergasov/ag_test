@@ -5,9 +5,15 @@ let app = new Vue({
         errorMsg: '',
         confirmMsg: '',
         pending_request: false,
-        adAccData: {}
+        adAccData: {},
+        headers: new Headers()
     },
     mounted: function () {
+        let tkn = document.getElementById('token');
+        if (tkn !== null) {
+            this.headers.append("x-auth-data", tkn.value);
+        }
+
         this.getCommonINfo();
     },
     methods: {
@@ -64,7 +70,9 @@ let app = new Vue({
             const self = this;
             self.pending_request = true;
             self.errorMsg = '';
+
             let dataInit = {
+                headers: this.headers,
                 method: method || 'GET',
             };
             if (dataInit.method !== 'GET') {
