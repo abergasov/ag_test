@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\AppBundle\Security\TokenAuthenticator;
 use App\Controller\Traits\LoggerTrait;
+use App\Controller\Traits\BaseTrait;
 use FacebookAds\Api;
 use FacebookAds\Object\AdAccount;
 use FacebookAds\Object\AdSet;
@@ -15,7 +16,9 @@ use Throwable;
 class FacebookAdsManagerController {
 
     use LoggerTrait;
+    use BaseTrait;
 
+    const FB_API_URL = 'https://graph.facebook.com/v3.2/';
     private $projectDir;
 
     public function __construct(string $projectDir) {
@@ -98,13 +101,26 @@ class FacebookAdsManagerController {
     private function setSpendCup () : array {
         $data = $this->getJSONFromRequest(['amount', 'act_id']);
 
-        $account = new AdAccount($data['act_id']);
+        $response = $this->apiCallWraper(
+            'POST',
+            $data['act_id'] . '?' . http_build_query([
+                'access_token' => $this->loadFromEnv('el_marker')
+            ]),
+            ['spend_cap' => (int)$data['amount']/100]
+        );
+        if (isset($response['success']) && $response['success']) {
+            return ['ok' => true];
+        } else {
+            throw new \RuntimeException($response['error_user_msg'] ?? $response['message']);
+        }
+
+        /*$account = new AdAccount($data['act_id']);
         $account->setData(array(
             AdSetFields::DAILY_SPEND_CAP => $data['amount'],
         ));
         $account->update();
 
-        return ['ok' => true];
+        return ['ok' => true];*/
     }
 
     /**
@@ -152,5 +168,9 @@ class FacebookAdsManagerController {
         $response->setContent(json_encode($result));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
+    }
+
+    private function apiCallWraper ($method, $path, $params) {
+        return $this->sendRequest($method, self::FB_API_URL.ltrim($path, '/'), $params);
     }
 }

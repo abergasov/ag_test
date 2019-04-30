@@ -17,10 +17,13 @@
             <h4>Amount spent: ${adAccData.amount_spent}</h4>
             <h4>Balance: ${adAccData.balance}</h4>
 
+            <h4>Current spend cup: ${adAccData.spend_cap}</h4>
+
             <div>
-                <div>Spend cap: <input type="number" v-model="adAccData.spend_cap">
+                <div>Change spend cap (USD): <input type="number" v-model="newSpendCup">
                     <button v-on:click="changeSpendCup()">change</button>
                 </div>
+                <div>Spend cup will change at ${ newSpendCupCents } cents</div>
             </div>
             <div v-if="adAccData.adsets.length > 0">
                 <h3>Ads Sets:</h3>

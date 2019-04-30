@@ -6,6 +6,7 @@ let app = new Vue({
         confirmMsg: '',
         pending_request: false,
         adAccData: {},
+        newSpendCup: 0,
         headers: new Headers()
     },
     mounted: function () {
@@ -15,6 +16,11 @@ let app = new Vue({
         }
 
         this.getCommonINfo();
+    },
+    watch: {
+        newSpendCup: function () {
+            this.newSpendCupCents = parseInt(this.newSpendCup - this.adAccData.amount_spent)*100;
+        }
     },
     methods: {
         notEmptyObject(obj){
@@ -26,6 +32,14 @@ let app = new Vue({
                 '/api/facebook/ads/manager/info',
                 function (response) {
                     self.adAccData = response.adaccounts;
+
+                    //convert spend amount to js float
+                    self.adAccData.amount_spent = parseFloat(self.adAccData.amount_spent.replace(',', '.'));
+                    //convert spend amount from cents to USD
+                    self.adAccData.spend_cap = parseInt(self.adAccData.spend_cap) / 100;
+                    //set suggested value of spend cup
+                    self.newSpendCup = self.adAccData.spend_cap - self.adAccData.amount_spent;
+                    self.newSpendCupCents = (self.adAccData.spend_cap - self.adAccData.amount_spent)*100;
                 }
             );
         },
@@ -36,6 +50,7 @@ let app = new Vue({
                 'api/facebook/ads/manager/acc_spend_cup',
                 function () {
                     self.confirmMsg = 'spend cup limit changed';
+                    self.adAccData.spend_cap = self.newSpendCupCents/100
                     setTimeout(function () {
                         self.confirmMsg = '';
                     },3000);
@@ -43,7 +58,7 @@ let app = new Vue({
                 'POST',
                 {
                     'act_id': this.adAccData.id,
-                    'amount': this.adAccData.spend_cap
+                    'amount': this.newSpendCupCents
                 })
         },
 
